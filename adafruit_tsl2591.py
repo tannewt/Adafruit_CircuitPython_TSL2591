@@ -39,7 +39,7 @@ __repo__ = "https://github.com/adafruit/Adafruit_CircuitPython_TSL2591.git"
 
 #pylint: disable=bad-whitespace
 # Internal constants:
-_TSL2591_ADDR                = const(0x29)
+_TSL2591_ADDR                = 0x29
 _TSL2591_COMMAND_BIT         = const(0xA0)
 _TSL2591_ENABLE_POWEROFF     = const(0x00)
 _TSL2591_ENABLE_POWERON      = const(0x01)
@@ -147,7 +147,7 @@ class TSL2591:
 
     @property
     def gain(self):
-        """Get and set the gain of the sensor.  Can be a value of:
+        """The gain of the sensor.  Can be a value of:
 
         - `GAIN_LOW` (1x)
         - `GAIN_MED` (25x)
@@ -170,7 +170,8 @@ class TSL2591:
 
     @property
     def integration_time(self):
-        """Get and set the integration time of the sensor.  Can be a value of:
+        """The integration time of the sensor.  Can be a value of:
+
         - `INTEGRATIONTIME_100MS` (100 millis)
         - `INTEGRATIONTIME_200MS` (200 millis)
         - `INTEGRATIONTIME_300MS` (300 millis)
@@ -194,7 +195,7 @@ class TSL2591:
 
     @property
     def raw_luminosity(self):
-        """Read the raw luminosity from the sensor (both IR + visible and IR
+        """The raw luminosity from the sensor (both IR + visible and IR
         only channels) and return a 2-tuple of those values.  The first value
         is IR + visible luminosity (channel 0) and the second is the IR only
         (channel 1).  Both values are 16-bit unsigned numbers (0-65535).
@@ -206,32 +207,26 @@ class TSL2591:
 
     @property
     def full_spectrum(self):
-        """Read the full spectrum (IR + visible) light and return its value
-        as a 32-bit unsigned number.
-        """
+        """The full spectrum (IR + visible) light as a 32-bit unsigned number."""
         channel_0, channel_1 = self.raw_luminosity
         return (channel_1 << 16) | channel_0
 
     @property
     def infrared(self):
-        """Read the infrared light and return its value as a 16-bit unsigned number.
-        """
+        """The infrared light as a 16-bit unsigned number."""
         _, channel_1 = self.raw_luminosity
         return channel_1
 
     @property
     def visible(self):
-        """Read the visible light and return its value as a 32-bit unsigned number.
-        """
+        """The visible light as a 32-bit unsigned number."""
         channel_0, channel_1 = self.raw_luminosity
         full = (channel_1 << 16) | channel_0
         return full - channel_1
 
     @property
     def lux(self):
-        """Read the sensor and calculate a lux value from both its infrared
-        and visible light channels.
-        """
+        """The visible light as a lux value."""
         channel_0, channel_1 = self.raw_luminosity
         # Handle overflow.
         if channel_0 == 0xFFFF or channel_1 == 0xFFFF:
